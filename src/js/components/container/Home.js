@@ -7,11 +7,13 @@ export class Home extends React.Component {
 	constructor(props){
 		super(props);
 		this.state = {
-			searchQuery: ''
+			searchQuery: '',
+			quantityToDisplay: Number.MAX_SAFE_INTEGER
 		};
 
 		this.handleOnKeyUp = this.handleOnKeyUp.bind(this);
 		this.formatTruckResults = this.formatTruckResults.bind(this);
+		this.handleSelectChange = this.handleSelectChange.bind(this);
 	}
 
 	handleOnKeyUp(e){
@@ -20,10 +22,21 @@ export class Home extends React.Component {
 		},  result => {this.props.truckSearch(this.state.searchQuery)});
 	}
 
+	handleSelectChange(e){
+		this.setState({
+			quantityToDisplay: Number(e.target.value)
+		});
+	}
+
 	formatTruckResults(){
 		//Determine which data to load
 		let trucksArray = this.props.truckResults;
-		if(trucksArray.length == 0){
+		const displayAmount = this.state.quantityToDisplay;
+
+		if(displayAmount != 0 ){
+			trucksArray = trucksArray.length == 0? this.props.truckData.slice(0, displayAmount) : trucksArray.slice(0, displayAmount);
+		}
+		else{
 			trucksArray = this.props.truckData;
 		}
 
@@ -60,7 +73,7 @@ export class Home extends React.Component {
 		return(
 			<div>
 				<Header />
-				<SearchBar onKeyUp={this.handleOnKeyUp} truckResults={formattedTruckResults} match={this.props.match}/>
+				<SearchBar onKeyUp={this.handleOnKeyUp} truckResults={formattedTruckResults} selectChange={this.handleSelectChange} />
 			</div>
 		);
 	}
