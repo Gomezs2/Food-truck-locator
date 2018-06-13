@@ -7,11 +7,13 @@ export class Home extends React.Component {
 	constructor(props){
 		super(props);
 		this.state = {
-			searchQuery: ''
+			searchQuery: '',
+			quantityToDisplay: '',
 		};
 
 		this.handleOnKeyUp = this.handleOnKeyUp.bind(this);
 		this.formatTruckResults = this.formatTruckResults.bind(this);
+		this.handleSelectChange = this.handleSelectChange.bind(this);
 	}
 
 	handleOnKeyUp(e){
@@ -20,11 +22,27 @@ export class Home extends React.Component {
 		},  result => {this.props.truckSearch(this.state.searchQuery)});
 	}
 
+	handleSelectChange(e){
+		this.setState({
+			quantityToDisplay: e.target.value
+		});
+	}
+
 	formatTruckResults(){
 		//Determine which data to load
 		let trucksArray = this.props.truckResults;
-		if(trucksArray.length == 0){
-			trucksArray = this.props.truckData;
+		switch(this.state.quantityToDisplay){
+			case '10':
+				trucksArray = trucksArray.length == 0? this.props.truckData.slice(0, 10) : trucksArray.slice(0, 10);
+				break;
+			case '25':
+				trucksArray = trucksArray.length == 0? this.props.truckData.slice(0, 25) : trucksArray.slice(0, 25);
+				break;
+			case '50':
+				trucksArray = trucksArray = trucksArray.length == 0? this.props.truckData.slice(0, 50) : trucksArray.slice(0, 50);
+				break;
+			default:
+				trucksArray = this.props.truckData;
 		}
 
 		trucksArray.sort((a,b) => {
@@ -60,7 +78,7 @@ export class Home extends React.Component {
 		return(
 			<div>
 				<Header />
-				<SearchBar onKeyUp={this.handleOnKeyUp} truckResults={formattedTruckResults} match={this.props.match}/>
+				<SearchBar onKeyUp={this.handleOnKeyUp} truckResults={formattedTruckResults} selectChange={this.handleSelectChange} />
 			</div>
 		);
 	}
