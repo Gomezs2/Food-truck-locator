@@ -8,7 +8,7 @@ export class Home extends React.Component {
 		super(props);
 		this.state = {
 			searchQuery: '',
-			quantityToDisplay: '',
+			quantityToDisplay: Number.MAX_SAFE_INTEGER
 		};
 
 		this.handleOnKeyUp = this.handleOnKeyUp.bind(this);
@@ -24,25 +24,20 @@ export class Home extends React.Component {
 
 	handleSelectChange(e){
 		this.setState({
-			quantityToDisplay: e.target.value
+			quantityToDisplay: Number(e.target.value)
 		});
 	}
 
 	formatTruckResults(){
 		//Determine which data to load
 		let trucksArray = this.props.truckResults;
-		switch(this.state.quantityToDisplay){
-			case '10':
-				trucksArray = trucksArray.length == 0? this.props.truckData.slice(0, 10) : trucksArray.slice(0, 10);
-				break;
-			case '25':
-				trucksArray = trucksArray.length == 0? this.props.truckData.slice(0, 25) : trucksArray.slice(0, 25);
-				break;
-			case '50':
-				trucksArray = trucksArray = trucksArray.length == 0? this.props.truckData.slice(0, 50) : trucksArray.slice(0, 50);
-				break;
-			default:
-				trucksArray = this.props.truckData;
+		const displayAmount = this.state.quantityToDisplay;
+
+		if(displayAmount != 0 ){
+			trucksArray = trucksArray.length == 0? this.props.truckData.slice(0, displayAmount) : trucksArray.slice(0, displayAmount);
+		}
+		else{
+			trucksArray = this.props.truckData;
 		}
 
 		trucksArray.sort((a,b) => {
