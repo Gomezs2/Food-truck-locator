@@ -1,6 +1,7 @@
 import React from 'react';
-import { Route, Switch, Link } from 'react-router-dom';
+import { Route, Switch} from 'react-router-dom';
 import { Home } from './Home';
+import { TruckView } from '../presentational/truckView';
 
 export class App extends React.Component{
 	constructor(props){
@@ -48,17 +49,16 @@ export class App extends React.Component{
 		return false;
 	}
 
-
-
 	render(){
 		return(  
 			<main>
-    			<Switch>
-      				<Route
-      					exact path='/' 
-      					render={ props => <Home truckData={this.state.truckData} truckSearch={this.populateTrucksToRender} truckResults={this.state.trucksToRender} match={this.props.match}/>}
-      				/>
-    			</Switch>
+				<Switch>
+      				<Route exact path='/' 
+      					render={ ({match}) => <Home truckData={this.state.truckData} truckSearch={this.populateTrucksToRender} truckResults={this.state.trucksToRender} match={match}/>} />
+      				<Route path={`/:truck`}
+      					component={TruckView} />
+      				<Route path='*' render={() => <h1>Not found</h1>} />
+      			</Switch>
   			</main>
 		);
 	}
