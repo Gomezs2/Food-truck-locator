@@ -10,9 +10,8 @@ export const SearchBar = props => {
 				<option value='25'>25</option>
 				<option value='50'>50</option>
 			</select>
-			<ul>
-				{props.truckResults}
-			</ul>
+			<br/>
+			<input type='checkbox' onClick={props.checkboxChange}/>Open Now
 		</div>
 	);
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Header } from '../presentational/homeHeader';
-import { SearchBar } from '../presentational/homeSearch';
+import { Header } from '../presentational/Header';
+import { SearchBar } from '../presentational/SearchBar';
 
 export class Home extends React.Component {
 	constructor(props){
@@ -14,6 +14,7 @@ export class Home extends React.Component {
 		this.handleOnKeyUp = this.handleOnKeyUp.bind(this);
 		this.formatTruckResults = this.formatTruckResults.bind(this);
 		this.handleSelectChange = this.handleSelectChange.bind(this);
+		this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
 	}
 
 	handleOnKeyUp(e){
@@ -26,6 +27,10 @@ export class Home extends React.Component {
 		this.setState({
 			quantityToDisplay: Number(e.target.value)
 		});
+	}
+
+	handleCheckboxChange(e){
+		this.props.getOpenTrucks(this.state.searchQuery);
 	}
 
 	formatTruckResults(){
@@ -69,11 +74,13 @@ export class Home extends React.Component {
 
 	render(){
 		let formattedTruckResults = this.formatTruckResults();
-
 		return(
 			<div>
 				<Header />
-				<SearchBar onKeyUp={this.handleOnKeyUp} truckResults={formattedTruckResults} selectChange={this.handleSelectChange} />
+				<SearchBar onKeyUp={this.handleOnKeyUp} truckResults={formattedTruckResults} selectChange={this.handleSelectChange} checkboxChange={this.handleCheckboxChange}/>
+				<ul>
+					{formattedTruckResults}
+				</ul>
 			</div>
 		);
 	}
