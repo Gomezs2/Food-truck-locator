@@ -8,57 +8,98 @@ export class App extends React.Component{
 		super(props);
 		this.state = {
 			truckData: [],
-			trucksToRender: [],
 			trucksOpen: [],
-			findOpenTrucks: false 
+			findOpenTrucks: false,
+			queryString: '',
+			trucksToRender: []
 		};
 
 		this.populateTrucksToRender = this.populateTrucksToRender.bind(this);
-		this.populateTrucksOpen = this.populateTrucksOpen.bind(this);
+		this.negatefindOpenTrucks = this.negatefindOpenTrucks.bind(this);
 		this.isOpen = this.isOpen.bind(this);
 		this.checkDay = this.checkDay.bind(this);
 		this.checkHour = this.checkHour.bind(this);
+		this.search = this.search.bind(this);
+		this.findOpenTrucks = this.findOpenTrucks.bind(this);
+		this.fetchData = this.fetchData.bind(this);
 	}
 
 	componentDidMount(){
+		this.fetchData();
+	}
+
+	fetchData(){
 		const endPoint = "https://data.sfgov.org/resource/6a9r-agq8?status=APPROVED";
 		fetch(endPoint).then( response => {
 			if(response.ok){
 				return response.json();
 			}
 			throw new Error('Network is currently down');
-		}).then(jsonData => {
+		}).then( jsonData => {
 			this.setState({
-				truckData: jsonData
+				truckData: jsonData,
+				trucksToRender: jsonData,
+				trucksOpen: this.findOpenTrucks(jsonData)
 			});
+
 		});
 	}
 
-	populateTrucksToRender(queryString){
-		const truckData = this.state.findOpenTrucks? this.state.trucksOpen: this.state.truckData;
-		const filteredTrucks = truckData.filter(truck => {
-			return truck.applicant.toLowerCase().startsWith(queryString.toLowerCase()) || 
-				truck.address.toLowerCase().startsWith(queryString.toLowerCase()) ||
-				this.containsFoodItem(truck.fooditems , queryString)
-		});
-
-		this.setState({
-			trucksToRender: filteredTrucks
-		});
-	}
-
-	populateTrucksOpen(queryString){
+	findOpenTrucks(truckArray){
 		const currentDate = new Date();
 		const userDay = currentDate.getDay() == 0? 7 : currentDate.getDay();
 		const userHour = currentDate.getHours(); 
-		const openTrucks = this.state.truckData.filter(truck => {
+		return truckArray.filter(truck => {
 			return this.isOpen(truck.dayshours, userDay, userHour);
 		});
+	}
 
+	componentDidUpdate(prevProps, prevState){
+		if(prevState.findOpenTrucks != this.state.findOpenTrucks){
+			this.populateTrucksToRender(this.state.queryString);
+		}
+	}
+
+	populateTrucksToRender(queryString){
+		if(queryString.length == 0){
+			if(this.state.findOpenTrucks){
+				this.setState({
+					trucksToRender: this.state.trucksOpen
+				});
+			}
+			else{
+				this.setState({
+					trucksToRender: this.state.truckData
+				});
+			}
+		}
+		else{
+			if(this.state.findOpenTrucks){
+				this.setState({
+					trucksToRender: this.search(queryString, this.state.trucksOpen)
+				});
+			}
+			else{
+				this.setState({
+					trucksToRender: this.search(queryString, this.state.truckData)
+				});
+			}
+		}
+	}
+
+	negatefindOpenTrucks(queryString){
 		this.setState({
-			trucksOpen: openTrucks,
-			findOpenTrucks: !this.state.findOpenTrucks
-		}, result => {this.populateTrucksToRender(queryString)});
+			findOpenTrucks: !this.state.findOpenTrucks,
+			queryString: queryString
+		});
+	}
+
+	search(queryString, truckArray){
+		return truckArray.filter(truck => {
+			return truck.applicant.toLowerCase().startsWith(queryString.toLowerCase()) || 
+				truck.address.toLowerCase().startsWith(queryString.toLowerCase()) ||
+				this.containsFoodItem(truck.fooditems, queryString)
+		});
 	}
 
 	isOpen(truckHours, userDay, userHour){
@@ -140,7 +181,7 @@ export class App extends React.Component{
 			<main>
 				<Switch>
       				<Route exact path='/' 
-      					render={({match}) => <Home truckData={this.state.truckData} truckSearch={this.populateTrucksToRender} truckResults={this.state.trucksToRender} match={match} getOpenTrucks={this.populateTrucksOpen} /> }/>
+      					render={({match}) => <Home truckSearch={this.populateTrucksToRender} truckResults={this.state.trucksToRender} match={match} handleCheckboxChange={this.negatefindOpenTrucks} /> }/>
       				<Route path={`/:truck`}
       					component={TruckView} />
       				<Route path='*' render={() => <h1>Not found</h1>} />

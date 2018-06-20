@@ -17,10 +17,16 @@ export class Home extends React.Component {
 		this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
 	}
 
+	componentDidUpdate(prevProps, prevState){
+		if(prevState.searchQuery != this.state.searchQuery){
+			this.props.truckSearch(this.state.searchQuery);
+		}
+	}
+
 	handleOnKeyUp(e){
 		this.setState({
 			searchQuery: e.target.value
-		},  result => {this.props.truckSearch(this.state.searchQuery)});
+		});
 	}
 
 	handleSelectChange(e){
@@ -30,19 +36,15 @@ export class Home extends React.Component {
 	}
 
 	handleCheckboxChange(e){
-		this.props.getOpenTrucks(this.state.searchQuery);
+		this.props.handleCheckboxChange(this.state.searchQuery);
 	}
 
 	formatTruckResults(){
-		//Determine which data to load
 		let trucksArray = this.props.truckResults;
 		const displayAmount = this.state.quantityToDisplay;
 
 		if(displayAmount != 0 ){
-			trucksArray = trucksArray.length == 0? this.props.truckData.slice(0, displayAmount) : trucksArray.slice(0, displayAmount);
-		}
-		else{
-			trucksArray = this.props.truckData;
+			trucksArray = trucksArray.slice(0, displayAmount);
 		}
 
 		trucksArray.sort((a,b) => {
