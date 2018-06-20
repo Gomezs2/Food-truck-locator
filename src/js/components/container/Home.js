@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Header } from '../presentational/homeHeader';
-import { SearchBar } from '../presentational/homeSearch';
+import { Header } from '../presentational/Header';
+import { SearchBar } from '../presentational/SearchBar';
 
 export class Home extends React.Component {
 	constructor(props){
@@ -14,12 +14,19 @@ export class Home extends React.Component {
 		this.handleOnKeyUp = this.handleOnKeyUp.bind(this);
 		this.formatTruckResults = this.formatTruckResults.bind(this);
 		this.handleSelectChange = this.handleSelectChange.bind(this);
+		this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
+	}
+
+	componentDidUpdate(prevProps, prevState){
+		if(prevState.searchQuery != this.state.searchQuery){
+			this.props.truckSearch(this.state.searchQuery);
+		}
 	}
 
 	handleOnKeyUp(e){
 		this.setState({
 			searchQuery: e.target.value
-		},  result => {this.props.truckSearch(this.state.searchQuery)});
+		});
 	}
 
 	handleSelectChange(e){
@@ -28,16 +35,16 @@ export class Home extends React.Component {
 		});
 	}
 
+	handleCheckboxChange(e){
+		this.props.handleCheckboxChange(this.state.searchQuery);
+	}
+
 	formatTruckResults(){
-		//Determine which data to load
 		let trucksArray = this.props.truckResults;
 		const displayAmount = this.state.quantityToDisplay;
 
 		if(displayAmount != 0 ){
-			trucksArray = trucksArray.length == 0? this.props.truckData.slice(0, displayAmount) : trucksArray.slice(0, displayAmount);
-		}
-		else{
-			trucksArray = this.props.truckData;
+			trucksArray = trucksArray.slice(0, displayAmount);
 		}
 
 		trucksArray.sort((a,b) => {
@@ -69,11 +76,13 @@ export class Home extends React.Component {
 
 	render(){
 		let formattedTruckResults = this.formatTruckResults();
-
 		return(
 			<div>
 				<Header />
-				<SearchBar onKeyUp={this.handleOnKeyUp} truckResults={formattedTruckResults} selectChange={this.handleSelectChange} />
+				<SearchBar onKeyUp={this.handleOnKeyUp} truckResults={formattedTruckResults} selectChange={this.handleSelectChange} checkboxChange={this.handleCheckboxChange}/>
+				<ul>
+					{formattedTruckResults}
+				</ul>
 			</div>
 		);
 	}
