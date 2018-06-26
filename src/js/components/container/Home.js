@@ -2,6 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Header } from '../presentational/Header';
 import { SearchBar } from '../presentational/SearchBar';
+import { TruckList } from '../presentational/TruckList';
+import { TruckItem } from '../presentational/TruckItem';
+
 
 export class Home extends React.Component {
 	constructor(props){
@@ -59,19 +62,23 @@ export class Home extends React.Component {
 
 		const formattedTrucks = trucksArray.map( truck => {
 			return(
-				<li key={truck.objectid}>
-					<Link to={{
-						pathname:`${this.props.match.url}${truck.applicant}`, 
-						state: { truck }
-					}}>
-						{truck.applicant}<br/>
-						{truck.address}
-					</Link>
-				</li>
+				<Link key={truck.objectid} to={{pathname:`${this.props.match.url}${truck.applicant}`, state: { truck }}}>
+					<TruckItem truckInfo={truck} truckFoodItems={this.formatTrucksItems(truck)}/>
+				</Link>
 			);
 		});
 
 		return formattedTrucks;
+	}
+
+	formatTrucksItems(truck){
+		if(truck.fooditems){
+			return truck.fooditems.split(':').map(foodItem => {
+				return(
+					<button className="btn btn-outline-info list-inline-item">{foodItem.toLowerCase()}</button>
+				);
+			});
+		}
 	}
 
 	render(){
@@ -79,10 +86,10 @@ export class Home extends React.Component {
 		return(
 			<div>
 				<Header />
-				<SearchBar onKeyUp={this.handleOnKeyUp} truckResults={formattedTruckResults} selectChange={this.handleSelectChange} checkboxChange={this.handleCheckboxChange}/>
-				<ul>
+				<SearchBar onKeyUp={this.handleOnKeyUp} selectChange={this.handleSelectChange} checkboxChange={this.handleCheckboxChange}/>
+				<TruckList>
 					{formattedTruckResults}
-				</ul>
+				</TruckList>
 			</div>
 		);
 	}
