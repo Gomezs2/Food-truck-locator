@@ -23,7 +23,7 @@ export const SearchBar = props => {
 				</label>
 				 </div>
 				 <div className="col-4">
-				   <input className="form-check-input open-now-box" type="checkbox" value="" id="defaultCheck1" onClick={props.checkboxChange}/>
+				   <input className="form-check-input open-now-box" type="checkbox" checked={props.isChecked} value="" id="defaultCheck1" onClick={props.checkboxChange}/>
 				  </div>
 			</div>
 		</div>

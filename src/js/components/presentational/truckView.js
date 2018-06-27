@@ -3,9 +3,9 @@ import React from 'react';
 export const TruckView = props => {
 	let foodItems = [];
 	if(props.location.state.truck.fooditems){
-		foodItems = props.location.state.truck.fooditems.split(': ').map(foodItem => <button key={foodItem} className="btn btn-outline-info list-inline-item">{foodItem.toLowerCase()}</button>);
+		foodItems = props.location.state.truck.fooditems.split(': ').map(foodItem => <button key={foodItem} className="btn btn-info list-inline-item">{foodItem.toLowerCase()}</button>);
 	}
-    
+
 	return(
 		<div className='container truck-view'>
             <div className='row justify-content-center'>        
@@ -26,7 +26,7 @@ export const TruckView = props => {
                 </div>
             </div>
             <div className='row justify-content-center'>
-
+            
             </div>
         </div>
 	);

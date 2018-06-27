@@ -74,15 +74,26 @@ export class Home extends React.Component {
 		return formattedTrucks;
 	}
 
+	formatTrucksItems(truck){
+		if(truck.fooditems){
+			let key = 0;
+			return truck.fooditems.split(':').map(foodItem => {
+				return(
+					<button key={key++} className="btn btn-info list-inline-item">{foodItem.toLowerCase()}</button>
+				);
+			});
+		}
+	}
+
 	render(){
 		let formattedTruckResults = this.formatTruckResults();
 		return(
 			<div>
 				<Header />
-				<SearchBar onKeyUp={this.handleOnKeyUp} truckResults={formattedTruckResults} selectChange={this.handleSelectChange} checkboxChange={this.handleCheckboxChange}/>
-				<ul>
+				<SearchBar onKeyUp={this.handleOnKeyUp} selectChange={this.handleSelectChange} checkboxChange={this.handleCheckboxChange} isChecked={this.props.isChecked}/>
+				<TruckList>
 					{formattedTruckResults}
-				</ul>
+				</TruckList>
 			</div>
 		);
 	}

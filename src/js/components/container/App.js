@@ -181,7 +181,7 @@ export class App extends React.Component{
 			<main>
 				<Switch>
       				<Route exact path='/' 
-      					render={({match}) => <Home truckSearch={this.populateTrucksToRender} truckResults={this.state.trucksToRender} match={match} handleCheckboxChange={this.negatefindOpenTrucks} /> }/>
+      					render={({match}) => <Home truckSearch={this.populateTrucksToRender} truckResults={this.state.trucksToRender} match={match} handleCheckboxChange={this.negatefindOpenTrucks} isChecked={this.state.findOpenTrucks}/> }/>
       				<Route path={`/:truck`}
       					component={TruckView} />
       				<Route path='*' render={() => <h1>Not found</h1>} />
@@ -189,5 +189,5 @@ export class App extends React.Component{
   			</main>
 		);
 	}
-
 }
+
