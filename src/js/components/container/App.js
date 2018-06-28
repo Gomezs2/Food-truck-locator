@@ -2,7 +2,6 @@ import React from 'react';
 import { Route, Switch} from 'react-router-dom';
 import { Home } from './Home';
 import { TruckView } from '../presentational/TruckView';
-import '../../../css/styles.scss';
 
 export class App extends React.Component{
 	constructor(props){
@@ -23,7 +22,6 @@ export class App extends React.Component{
 		this.search = this.search.bind(this);
 		this.findOpenTrucks = this.findOpenTrucks.bind(this);
 		this.fetchData = this.fetchData.bind(this);
-		this.filterUnwantedtrucks = this.filterUnwantedtrucks.bind(this);
 	}
 
 	componentDidMount(){
@@ -38,18 +36,13 @@ export class App extends React.Component{
 			}
 			throw new Error('Network is currently down');
 		}).then( jsonData => {
-			const filteredTrucks = this.filterUnwantedtrucks(jsonData);
 			this.setState({
-				truckData: filteredTrucks,
-				trucksToRender: filteredTrucks,
+				truckData: jsonData,
+				trucksToRender: jsonData,
 				trucksOpen: this.findOpenTrucks(jsonData)
 			});
 
 		});
-	}
-
-	filterUnwantedtrucks(truckData){
-		return truckData.filter(truck => truck.applicant != 'SF Cart Project');
 	}
 
 	findOpenTrucks(truckArray){
@@ -176,9 +169,10 @@ export class App extends React.Component{
 
 	containsFoodItem(fooditems, queryString){
 		if(fooditems){
-			let formattedFoodItems = fooditems.split(':').map(foodItem => foodItem.toLowerCase());
+			let formattedFoodItems = fooditems.split(': ').map(foodItem => foodItem.toLowerCase());
 			return formattedFoodItems.includes(queryString.toLowerCase());
 		}
+
 		return false;
 	}
 

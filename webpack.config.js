@@ -1,48 +1,29 @@
-
-const path = require('path');
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-
-const extractSass = new MiniCssExtractPlugin({
-  filename: 'main.css'
-});
+const HtmlWebPackPlugin = require("html-webpack-plugin");
 
 module.exports = {
-  entry: ['./src/index.js'],
-  output: {
-    filename: 'main.js',
-    path: path.resolve(__dirname, 'dist')
-  },
-  devServer: {
-    contentBase: './dist'
-  },
   module: {
     rules: [
       {
         test: /\.js$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader',
-          options: { presets: ['env'] }
+          loader: "babel-loader"
         }
       },
       {
-        test: /\.scss$/,
-         use: [
-          MiniCssExtractPlugin.loader,
-          "css-loader"
-        ]
-      },
-      {
-        test: /\.(png|jpg|gif)$/,
-         use: [
+        test: /\.html$/,
+        use: [
           {
-            loader: 'file-loader',
-            options: {}  
+            loader: "html-loader"
           }
         ]
       }
     ]
   },
-  plugins: [ extractSass ],
-  devtool: 'source-map'
+  plugins: [
+    new HtmlWebPackPlugin({
+      template: "./src/index.html",
+      filename: "./index.html"
+    })
+  ]
 };
