@@ -6,7 +6,7 @@ export const SearchBar = props => {
 		<div className='container'>
 			<div className='row justify-content-center'>
 			  <div className="input-group w-75 p-3" >
-			    <input type="text" className="form-control" placeholder="Food Truck's Name | Address | Dishes" onChange={props.onKeyUp} value={props.searchQuery}/>
+			    <input type="text" className="form-control" placeholder="Food Truck's Name | Address | Dishes" onKeyUp={props.onKeyUp}/>
 			    <div className="input-group-append">
 			    	<select className="custom-select mr-sm-2" id="inlineFormCustomSelect" onChange={props.selectChange}>
 			    	  <option value='0'>All</option>

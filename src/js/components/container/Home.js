@@ -5,7 +5,6 @@ import { SearchBar } from '../presentational/SearchBar';
 import { TruckList } from '../presentational/TruckList';
 import { TruckItem } from '../presentational/TruckItem';
 
-
 export class Home extends React.Component {
 	constructor(props){
 		super(props);
@@ -91,7 +90,7 @@ export class Home extends React.Component {
 		return(
 			<div>
 				<Header />
-				<SearchBar onKeyUp={this.handleOnKeyUp} selectChange={this.handleSelectChange} checkboxChange={this.handleCheckboxChange} isChecked={this.props.isChecked} searchQuery={this.state.searchQuery}/>
+				<SearchBar onKeyUp={this.handleOnKeyUp} selectChange={this.handleSelectChange} checkboxChange={this.handleCheckboxChange} isChecked={this.props.isChecked}/>
 				<TruckList>
 					{formattedTruckResults}
 				</TruckList>
