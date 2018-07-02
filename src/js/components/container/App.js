@@ -176,7 +176,7 @@ export class App extends React.Component{
 
 	containsFoodItem(fooditems, queryString){
 		if(fooditems){
-			let formattedFoodItems = fooditems.split(':').map(foodItem => foodItem.toLowerCase());
+			let formattedFoodItems = fooditems.split(':').map(foodItem => foodItem.trim().toLowerCase());
 			return formattedFoodItems.includes(queryString.toLowerCase());
 		}
 		return false;

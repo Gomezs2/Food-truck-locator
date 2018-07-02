@@ -1,13 +1,19 @@
 import React from 'react';
+import {SimpleMap} from './TruckMap';
 
 export const TruckView = props => {
-	let foodItems = [];
-	if(props.location.state.truck.fooditems){
-		foodItems = props.location.state.truck.fooditems.split(': ').map(foodItem => <button key={foodItem} className="btn btn-info list-inline-item">{foodItem.toLowerCase()}</button>);
-	}
+    let foodItems = [];
+    if(props.location.state.truck.fooditems){
+        foodItems = props.location.state.truck.fooditems.split(': ').map(foodItem =><h5 key={foodItem} className="list-inline-item"><span className="badge badge-info">{foodItem.toLowerCase()}</span></h5>);
+    }
 
-	return(
-		<div className='container truck-view'>
+    const truckCoord = {
+        lat: Number(parseFloat(props.location.state.truck.latitude).toFixed(4)),
+        lng: Number(parseFloat(props.location.state.truck.longitude).toFixed(4))
+    };
+
+    return(
+        <div className='container truck-view'>
             <div className='row justify-content-center'>        
                 <h1>{props.location.state.truck.applicant}</h1>
             </div>
@@ -26,8 +32,8 @@ export const TruckView = props => {
                 </div>
             </div>
             <div className='row justify-content-center'>
-            
+                <SimpleMap center={truckCoord} zoom={16} />
             </div>
         </div>
-	);
+    );
 }

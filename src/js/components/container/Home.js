@@ -25,6 +25,10 @@ export class Home extends React.Component {
 		}
 	}
 
+	componentDidMount(){
+		this.props.truckSearch(this.state.searchQuery);
+	}
+
 	handleOnKeyUp(e){
 		this.setState({
 			searchQuery: e.target.value
@@ -83,7 +87,6 @@ export class Home extends React.Component {
 
 	render(){
 		let formattedTruckResults = this.formatTruckResults();
-		console.log(formattedTruckResults.length);
 		return(
 			<div>
 				<Header />
