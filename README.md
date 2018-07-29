@@ -20,6 +20,6 @@
 
 ### Learned ###
 * Core concepts of React and JavaScript(ES6)
-* Understanding of smart vs. dumb components to segregate business logic vs. views
+* Understanding of container vs presentational components to segregate business logic vs. views
 * Bringing multiple technologies like React, Webpack, React Router together to build a small product
 * Understanding modularity of React components
